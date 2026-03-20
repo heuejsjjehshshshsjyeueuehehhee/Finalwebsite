@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Anime</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <style>
+        .anime-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #fff; padding: 15px; border-bottom: 1px solid #eee;
+        }
+        .anime-info { display: flex; align-items: center; gap: 15px; }
+        .thumb { width: 50px; height: 70px; object-fit: cover; border-radius: 4px; }
+        .del-btn { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        .del-btn:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">AnimeVerse Pro</div>
+        <div class="menu">
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/add-anime">➕ Add Anime</a>
+            <a href="/admin/manage-anime" class="active">📂 Manage Library</a>
+            <a href="/admin/settings">⚙️ Settings</a>
+            <a href="/" target="_blank">🌍 Visit Site</a>
+            <a href="/auth/logout" style="color:#e74c3c;">🚪 Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header><h3>Manage Library</h3></header>
+
+        <div class="dashboard-container">
+            <div class="card">
+                <h3>All Anime (<%= library.length %>)</h3>
+                
+                <% if(typeof msg !== 'undefined') { %>
+                    <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:4px;">
+                        <%= msg %>
+                    </div>
+                <% } %>
+
+                <div style="margin-top:20px;">
+                    <% if(library.length === 0) { %>
+                        <p style="color:#777; padding:20px;">Library is empty.</p>
+                    <% } %>
+
+                    <% library.forEach(anime => { %>
+                        <div class="anime-item">
+                            <div class="anime-info">
+                                <img src="<%= anime.thumbnail %>" class="thumb">
+                                <div>
+                                    <h4 style="margin:0;"><%= anime.title %></h4>
+                                    <small style="color:#888;">Seasons: <%= anime.seasons.length %></small>
+                                </div>
+                            </div>
+                            
+                            <form action="/admin/delete-anime" method="POST" onsubmit="return confirm('Are you sure? This will delete the anime and stop tracking.');">
+                                <input type="hidden" name="animeId" value="<%= anime.id %>">
+                                <button type="submit" class="del-btn">🗑️ Delete</button>
+                            </form>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

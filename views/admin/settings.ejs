@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Settings</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand">AnimeVerse Pro</div>
+        <div class="menu">
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/add-anime">➕ Add Anime</a>
+            <a href="/admin/manage-anime">📂 Manage Library</a>
+            <a href="/admin/settings" class="active">⚙️ Settings</a>
+            <a href="/" target="_blank">🌍 Visit Site</a>
+            <a href="/auth/logout" style="color:#e74c3c;">🚪 Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header><h3>General Settings</h3></header>
+
+        <div class="dashboard-container">
+            <div class="card" style="max-width:600px;">
+                
+                <% if(typeof msg !== 'undefined') { %>
+                    <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:4px;">
+                        Settings Saved Successfully!
+                    </div>
+                <% } %>
+
+                <form action="/admin/settings" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="form-group">
+                        <label>Website Name</label>
+                        <input type="text" name="siteName" class="form-control" value="<%= site.siteName %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Theme Color</label>
+                        <input type="color" name="themeColor" value="<%= site.themeColor %>" style="width:100%; height:40px; cursor:pointer;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Logo</label>
+                        <input type="file" name="logo" class="form-control">
+                        <% if(site.logoUrl) { %>
+                            <div style="margin-top:10px;">
+                                <img src="<%= site.logoUrl %>" style="height:40px; background:#eee; padding:5px;">
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Maintenance Mode</label>
+                        <select name="maintenanceMode" class="form-control">
+                            <option value="off" <%= !site.maintenanceMode ? 'selected' : '' %>>Disabled (Live)</option>
+                            <option value="on" <%= site.maintenanceMode ? 'selected' : '' %>>Enabled (Under Construction)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

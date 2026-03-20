@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Spotlight & Trending</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #FFD700; --spotlight: #00e5ff; --trending: #ff4757; --dark: #1e1e2e; }
+        body { background: #181825; color: #cdd6f4; font-family: 'Segoe UI', sans-serif; }
+        
+        .sticky-header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(24, 24, 37, 0.95);
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; gap: 15px; align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .search-input {
+            flex: 1; padding: 12px 20px; border-radius: 50px; border: 1px solid #444;
+            background: #111; color: white; outline: none; font-size: 16px;
+        }
+        .btn-save {
+            background: var(--primary); color: black; border: none; 
+            padding: 12px 30px; border-radius: 30px; font-weight: 900; 
+            cursor: pointer; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-save:hover { transform: scale(1.05); background: #fff; }
+
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px; margin-top: 25px; padding-bottom: 50px;
+        }
+
+        .anime-card {
+            background: #1e1e2e; border-radius: 8px; overflow: hidden;
+            border: 2px solid #333; position: relative; height: 300px;
+            display: flex; flex-direction: column; transition: 0.2s;
+        }
+        
+        .anime-card.active-s { border-color: var(--spotlight); }
+        .anime-card.active-t { border-color: var(--trending); }
+        .anime-card.active-both { border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+
+        .rank-controls {
+            position: absolute; top: 0; left: 0; width: 100%;
+            background: rgba(0,0,0,0.8); padding: 8px; 
+            display: flex; justify-content: space-between; gap: 5px; z-index: 50;
+        }
+
+        .input-group { width: 48%; text-align: center; }
+        .lbl { font-size: 10px; font-weight: bold; display: block; margin-bottom: 2px; text-transform: uppercase; }
+        
+        .rank-input {
+            width: 100%; height: 30px; text-align: center; font-weight: bold;
+            border: 2px solid #555; background: #fff; color: #000; border-radius: 4px; outline: none;
+        }
+        .rank-input:focus { border-color: #000; transform: scale(1.1); }
+        .inp-s { background: #e0ffff; color: #004d40; }
+        .inp-t { background: #ffe4e6; color: #881337; }
+
+        .poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .anime-card.active-s .poster, .anime-card.active-t .poster { opacity: 0.3; }
+        .card-title {
+            position: absolute; bottom: 0; width: 100%; background: #000;
+            color: #fff; font-size: 12px; padding: 8px; text-align: center;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">Admin Panel</div>
+        <div class="menu">
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/manage-anime">📂 Library</a>
+            <a href="/admin/trending" class="active">🔥 Manage Home</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <form id="mgmtForm" onsubmit="return false;">
+            <input type="hidden" name="payload" id="payloadInput">
+
+            <div class="sticky-header">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search anime..." onkeyup="filterAnime()">
+                <button type="button" class="btn-save" onclick="saveData()">💾 Save Changes</button>
+            </div>
+
+            <div class="grid-container" id="animeGrid">
+                <% 
+                // 🟢 FORCE STRING CONVERSION (Fixes ID mismatch)
+                const safeS = (spotlightIds || []).map(String);
+                const safeT = (trendingIds || []).map(String);
+
+                library.forEach(anime => { 
+                    const idStr = String(anime.id);
+                    
+                    let sIndex = safeS.indexOf(idStr);
+                    let tIndex = safeT.indexOf(idStr);
+                    
+                    // Display Rank (Index + 1)
+                    let sVal = sIndex !== -1 ? sIndex + 1 : '';
+                    let tVal = tIndex !== -1 ? tIndex + 1 : '';
+
+                    let cls = '';
+                    if(sVal && tVal) cls = 'active-both';
+                    else if(sVal) cls = 'active-s';
+                    else if(tVal) cls = 'active-t';
+                %>
+                    <div class="anime-card filter-item <%= cls %>" data-title="<%= anime.title.toLowerCase() %>" data-id="<%= anime.id %>">
+                        <div class="rank-controls">
+                            <div class="input-group">
+                                <span class="lbl" style="color:var(--spotlight)">Spotlight</span>
+                                <input type="number" class="rank-input inp-s" value="<%= sVal %>" min="1" placeholder="-" oninput="highlightCard(this)">
+                            </div>
+                            <div class="input-group">
+                                <span class="lbl" style="color:var(--trending)">Trending</span>
+                                <input type="number" class="rank-input inp-t" value="<%= tVal %>" min="1" placeholder="-" oninput="highlightCard(this)">
+                            </div>
+                        </div>
+                        <img src="<%= anime.thumbnail %>" class="poster">
+                        <p class="card-title"><%= anime.title %></p>
+                    </div>
+                <% }) %>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function filterAnime() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('filter-item');
+            for (let card of cards) {
+                const title = card.getAttribute('data-title');
+                card.style.display = title.includes(input) ? "flex" : "none";
+            }
+        }
+
+        function highlightCard(input) {
+            const card = input.closest('.anime-card');
+            const sVal = card.querySelector('.inp-s').value;
+            const tVal = card.querySelector('.inp-t').value;
+            card.className = 'anime-card filter-item'; 
+            if (sVal && tVal) card.classList.add('active-both');
+            else if (sVal) card.classList.add('active-s');
+            else if (tVal) card.classList.add('active-t');
+        }
+
+        function saveData() {
+            const cards = document.querySelectorAll('.anime-card');
+            let dataList = [];
+
+            cards.forEach(card => {
+                const id = card.getAttribute('data-id');
+                const sInput = card.querySelector('.inp-s');
+                const tInput = card.querySelector('.inp-t');
+
+                if (sInput && tInput) {
+                    const sRank = sInput.value;
+                    const tRank = tInput.value;
+                    
+                    // Sirf tab add karo agar koi value ho
+                    if (sRank || tRank) {
+                        dataList.push({
+                            id: String(id), // Force String ID
+                            s: sRank ? parseInt(sRank) : 0,
+                            t: tRank ? parseInt(tRank) : 0
+                        });
+                    }
+                }
+            });
+
+            // Convert to JSON
+            document.getElementById('payloadInput').value = JSON.stringify(dataList);
+            
+            // Submit
+            const form = document.getElementById('mgmtForm');
+            form.method = "POST";
+            form.action = "/admin/trending";
+            form.submit();
+        }
+    </script>
+</body>
+</html>

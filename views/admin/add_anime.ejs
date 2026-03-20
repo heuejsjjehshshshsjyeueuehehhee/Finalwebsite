@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Anime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #121212; color: #fff; font-family: sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #1e1e1e; padding: 30px; border-radius: 10px; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; background: #2a2a2a; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box;}
+        .lang-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+        .lang-label { background: #2a2a2a; padding: 5px 15px; border-radius: 20px; cursor: pointer; border: 1px solid #444; }
+        input[type="checkbox"] { display: none; }
+        input:checked + .lang-label { background: #ffb43a; color: #000; font-weight: bold; }
+        .btn { width: 100%; padding: 15px; background: #ffb43a; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; border-radius: 5px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="container">
+        <h2 style="text-align:center; color:#ffb43a;">Add New Anime</h2>
+        <form action="/admin/add-anime" method="POST">
+            
+            <div style="margin-bottom:15px;">
+                <label>URL Slug (e.g. naruto-shippuden)</label>
+                <input type="text" name="url" required placeholder="From watchanimeworld url">
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label>Type</label>
+                <select name="type" id="type" onchange="toggle()">
+                    <option value="TV">TV Series</option>
+                    <option value="Movie">Movie</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label>Select Languages (Tracker will find these)</label>
+                <div class="lang-group">
+                    <label><input type="checkbox" name="languages" value="Hindi" checked><span class="lang-label">Hindi</span></label>
+                    <label><input type="checkbox" name="languages" value="Tamil"><span class="lang-label">Tamil</span></label>
+                    <label><input type="checkbox" name="languages" value="Telugu"><span class="lang-label">Telugu</span></label>
+                    <label><input type="checkbox" name="languages" value="Malayalam"><span class="lang-label">Malayalam</span></label>
+                    <label><input type="checkbox" name="languages" value="Kannada"><span class="lang-label">Kannada</span></label>
+                    <label><input type="checkbox" name="languages" value="Bengali"><span class="lang-label">Bengali</span></label>
+                    <label><input type="checkbox" name="languages" value="Marathi"><span class="lang-label">Marathi</span></label>
+                    <label><input type="checkbox" name="languages" value="Japanese"><span class="lang-label">Japanese</span></label>
+                    <label><input type="checkbox" name="languages" value="English"><span class="lang-label">English</span></label>
+                </div>
+            </div>
+
+            <div id="series-opts" style="border-top:1px solid #333; padding-top:15px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
+                    <div><label>Season</label><input type="number" name="season" value="1"></div>
+                    <div><label>Start Ep</label><input type="number" name="episode" value="1"></div>
+                    <div><label>End Ep</label><input type="number" name="targetEpisode" value="12"></div>
+                </div>
+            </div>
+
+            <button class="btn">START TRACKING</button>
+        </form>
+    </div>
+    <script>
+        function toggle() {
+            document.getElementById('series-opts').style.display = 
+                document.getElementById('type').value === 'Movie' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
