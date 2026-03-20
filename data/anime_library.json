@@ -1,0 +1,129 @@
+[
+    {
+        "id": "76fb2b71-6ea3-43a3-a2c9-874245fd9453",
+        "title": "Your Name.",
+        "description": "Collaboration commercials with Suntory and Kimi no Na wa..\n\nThe \"Mitsuha no Omoi\" (Mitsuha's Thoughts) commercial shows the character Mitsuha Miyamizu drinking SUNTORY Minami Alps Tennensui Yogurina, which is yogurt-flavored mineral water.\n\nThe \"Taki no Omoi\" (Taki's Thoughts) commercial shows the character Taki Tachibana drinking SUNTORY Minami Alps Ten'nensui, which is mineral water. \n\nThe \"Kasanaru Omoi\" (Overlap Thoughts) commercial shows both Taki and Mitsuha combining their thoughts through mixed dialogue with some alternative footage and a new song.\n\n(Source: Anime News Network)",
+        "thumbnail": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/97962-3rBcawJt63sG.jpg",
+        "genres": [
+            "Award Winning",
+            "Drama",
+            "Romance"
+        ],
+        "slug": "your-name",
+        "type": "Movie",
+        "totalEpisodes": 1,
+        "isMovie": true,
+        "languages": [
+            "Hindi"
+        ],
+        "seasons": [
+            {
+                "season": 1,
+                "episodes": [
+                    {
+                        "episode": 1,
+                        "title": "Full Movie",
+                        "url": {
+                            "Hindi": "https://short.icu/Ygwkuw1ea"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/Ygwkuw1ea"
+                        },
+                        "releaseDate": "2026-02-23"
+                    }
+                ],
+                "targetEpisode": 12
+            }
+        ]
+    },
+    {
+        "id": "8c4348d2-7d69-4b18-af51-17943d7b30bb",
+        "title": "Naruto Shippuden",
+        "description": "Naruto: Shippuuden is the continuation of the original animated TV series Naruto. The story revolves around an older and slightly more matured Uzumaki Naruto and his quest to save his friend Uchiha Sasuke from the grips of the snake-like Shinobi, Orochimaru. After 2 and a half years Naruto finally returns to his village of Konoha, and sets about putting his ambitions to work, though it will not be easy, as he has amassed a few (more dangerous) enemies, in the likes of the shinobi organization; Akatsuki. \n(Source: Anime News Network)",
+        "thumbnail": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Fantasy",
+            "Shounen"
+        ],
+        "slug": "naruto-shippuden",
+        "type": "TV",
+        "totalEpisodes": 28,
+        "isMovie": false,
+        "languages": [
+            "Hindi"
+        ],
+        "seasons": [
+            {
+                "season": 1,
+                "episodes": [
+                    {
+                        "episode": 1,
+                        "title": "Episode 1",
+                        "url": {
+                            "Hindi": "https://short.icu/JPRG69Zz-"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/JPRG69Zz-"
+                        },
+                        "releaseDate": "2026-02-23"
+                    },
+                    {
+                        "episode": 2,
+                        "title": "Episode 2",
+                        "url": {
+                            "Hindi": "https://short.icu/22kx_cgLa"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/22kx_cgLa"
+                        },
+                        "releaseDate": "2026-02-23"
+                    }
+                ],
+                "targetEpisode": 2,
+                "startEpisode": 1
+            },
+            {
+                "season": 2,
+                "episodes": [
+                    {
+                        "episode": 33,
+                        "title": "Episode 33",
+                        "url": {
+                            "Hindi": "https://short.icu/04MwYNmeV_"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/04MwYNmeV_"
+                        },
+                        "releaseDate": "2026-02-23"
+                    },
+                    {
+                        "episode": 34,
+                        "title": "Episode 34",
+                        "url": {
+                            "Hindi": "https://short.icu/JTd6jksjd"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/JTd6jksjd"
+                        },
+                        "releaseDate": "2026-02-23"
+                    },
+                    {
+                        "episode": 35,
+                        "title": "Episode 35",
+                        "url": {
+                            "Hindi": "https://short.icu/rf7OXgMTV"
+                        },
+                        "streams": {
+                            "Hindi": "https://short.icu/rf7OXgMTV"
+                        },
+                        "releaseDate": "2026-02-23"
+                    }
+                ],
+                "targetEpisode": 35,
+                "startEpisode": 33
+            }
+        ]
+    }
+]
