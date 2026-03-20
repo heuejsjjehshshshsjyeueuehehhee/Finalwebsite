@@ -1,0 +1,10 @@
+{
+    "server": {
+        "port": 19101,
+        "secretKey": "animeverse_super_secret_key_2026"
+    },
+    "initialAdmin": {
+        "username": "akashterimshdhjdkfkfkfkfif",
+        "password": "admin123akahsjkehrirjbdydjdndhdidjdjdjdjodo"
+    }
+}
