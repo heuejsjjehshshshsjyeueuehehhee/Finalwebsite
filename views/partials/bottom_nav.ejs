@@ -1,0 +1,34 @@
+<div class="bottom-nav">
+    <a href="/series" class="nav-item <%= typeof path !== 'undefined' && path === '/series' ? 'active' : '' %>">
+        <i class="fas fa-layer-group"></i>
+        <span>Series</span>
+    </a>
+
+    <a href="/" class="nav-item-center">
+        <div class="center-circle <%= typeof path !== 'undefined' && path === '/' ? 'active-circle' : '' %>">
+            <i class="fas fa-home"></i>
+        </div>
+    </a>
+    
+    <a href="/movies" class="nav-item <%= typeof path !== 'undefined' && path === '/movies' ? 'active' : '' %>">
+        <i class="fas fa-film"></i>
+        <span>Movies</span>
+    </a>
+</div>
+
+<style>
+    .bottom-nav {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        width: 85%; max-width: 350px;
+        background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px);
+        height: 60px; display: flex; justify-content: space-between; align-items: center;
+        border-radius: 35px; border: 1px solid rgba(255,255,255,0.1);
+        padding: 0 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10000;
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; text-decoration: none; font-size: 10px; gap: 3px; transition: 0.3s; }
+    .nav-item i { font-size: 18px; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item-center { position: relative; top: -20px; }
+    .center-circle { width: 55px; height: 55px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-main); color: #888; font-size: 22px; box-shadow: 0 -5px 10px rgba(0,0,0,0.3); transition: 0.3s; }
+    .active-circle { background: var(--primary); color: black; box-shadow: 0 0 20px rgba(255, 180, 58, 0.4); }
+</style>

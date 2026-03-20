@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'WeebDuniya' %></title>
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ⚡ HEADER STYLES */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 30px; 
+            background: rgba(10, 10, 10, 0.9); /* Dark Transparent */
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ⚡ GLITCH LOGO CONTAINER */
+        .logo-container { position: relative; display: inline-block; }
+
+        .glitch-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 28px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .glitch-logo span { color: #FFD700; } /* Gold Color for 'Duniya' */
+
+        /* Glitch Layers */
+        .glitch-logo::before, .glitch-logo::after {
+            content: 'WEEBDUNIYA';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; opacity: 0.8;
+        }
+
+        .glitch-logo::before {
+            color: #0ff; z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-1 2.5s infinite linear alternate-reverse;
+        }
+
+        .glitch-logo::after {
+            color: #f0f; z-index: -2;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            animation: glitch-2 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-1 {
+            0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+            20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+            40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+            100% { clip-path: inset(30% 0 40% 0); transform: translate(1px, -1px); }
+        }
+
+        @keyframes glitch-2 {
+            0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
+            20% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(10% 0 80% 0); transform: translate(-1px, -2px); }
+            100% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, -1px); }
+        }
+
+        .nav-icon { font-size: 20px; color: white; transition: 0.3s; padding: 10px; border-radius: 50%; }
+        .nav-icon:hover { color: #FFD700; transform: rotate(15deg); background: rgba(255,215,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/search" class="nav-icon"><i class="fas fa-search"></i></a>
+        </div>
+
+        <div class="logo-center">
+            <a href="/" style="text-decoration:none;">
+                <div class="logo-container">
+                    <div class="glitch-logo" data-text="WEEBDUNIYA">
+                        WEEB<span>DUNIYA</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <% if(typeof user !== 'undefined' && user) { %>
+                <a href="/admin/dashboard" class="nav-icon" title="Dashboard"><i class="fas fa-tachometer-alt"></i></a>
+                <a href="/auth/logout" class="nav-icon" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+            <% } %>
+            </div>
+    </nav>
