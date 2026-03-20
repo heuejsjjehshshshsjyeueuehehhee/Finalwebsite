@@ -1,0 +1,369 @@
+/* =========================================
+   1. IMPORTS & VARIABLES
+   ========================================= */
+/* AnimeLok Style Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;600;700;900&display=swap');
+
+:root {
+    /* 🟡 THEME COLORS */
+    --primary: #FFD700;       /* Gold/Yellow */
+    --primary-hover: #FFC107; 
+    
+    /* 🟠 ANIMELOK SPECIFIC */
+    --lok-orange: #ff9600;    /* Signature Orange */
+    
+    /* ⚫ BACKGROUNDS */
+    --bg-main: #0a0a0a;       /* Deep Black */
+    --bg-card: #161616;       /* Dark Grey Card */
+    --bg-header: rgba(10, 10, 10, 0.95);
+    
+    /* ⚪ TEXT */
+    --text-main: #ffffff;
+    --text-muted: #b3b3b3;
+    
+    --border-color: #333;
+    --radius: 12px;
+}
+
+/* =========================================
+   2. GLOBAL RESET
+   ========================================= */
+* { box-sizing: border-box; outline: none; }
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif; /* Default Font */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.2s; }
+ul { list-style: none; padding: 0; margin: 0; }
+img { max-width: 100%; display: block; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* =========================================
+   3. NAVBAR (HEADER)
+   ========================================= */
+header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+    background: var(--bg-header); border-bottom: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px); padding: 0 20px; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+
+.logo { 
+    font-family: 'Anton', sans-serif; font-size: 24px; color: var(--primary); 
+    text-transform: uppercase; letter-spacing: 1px;
+}
+
+.nav-links a { color: #ccc; margin-left: 20px; font-weight: 600; font-size: 14px; }
+.nav-links a:hover { color: #fff; }
+
+/* =========================================
+   4. HERO SECTION (AnimeLok Style - EXACT)
+   ========================================= */
+.swiper-hero {
+    width: 100%;
+    height: 85vh; /* Full Height */
+    min-height: 600px;
+    background: #000;
+}
+
+.hero-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hero-backdrop {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+    opacity: 0.85;
+    /* Smooth fade to black at bottom */
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.hero-gradient {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #0a0a0a 15%, rgba(10,10,10,0.8) 35%, transparent 70%);
+    z-index: 2;
+}
+
+.hero-content {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    width: 90%;
+    max-width: 900px;
+    z-index: 5;
+}
+
+/* ☢️ NUCLEAR FIX: Hide weird iframes/videos/Minecraft in Hero */
+.hero-content iframe, 
+.hero-content video,
+.hero-content embed,
+.hero-content object,
+.video-wrapper-placeholder {
+    display: none !important;
+    width: 0 !important; height: 0 !important;
+    opacity: 0 !important; pointer-events: none !important;
+}
+
+/* Typography */
+.spotlight-label {
+    font-size: 13px; font-weight: 700; color: var(--lok-orange);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.hero-main-title {
+    font-family: 'Anton', sans-serif !important;
+    font-size: 4rem; /* Big Impact */
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    /* Gradient Text Effect */
+    background: -webkit-linear-gradient(#fff, #ccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    margin-bottom: 15px;
+    filter: drop-shadow(2px 4px 0px rgba(0,0,0,0.5));
+}
+
+/* Badges (Pill Shape) */
+.meta-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+.meta-tag {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 50px; /* Fully Round */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.genre-text { color: #ccc; font-size: 14px; margin-bottom: 20px; font-weight: 500; }
+
+.hero-description {
+    color: #ddd; font-size: 15px; line-height: 1.6;
+    max-width: 650px; margin-bottom: 30px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Buttons */
+.hero-actions { display: flex; gap: 15px; align-items: center; }
+
+.btn-watch-orange {
+    background-color: var(--lok-orange);
+    color: #000;
+    font-size: 16px; font-weight: 800;
+    padding: 14px 35px; border-radius: 8px; border: none;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; transition: 0.2s;
+    box-shadow: 0 5px 20px rgba(255, 150, 0, 0.4);
+}
+.btn-watch-orange:hover { background-color: #ffb03a; transform: translateY(-3px); }
+
+.btn-details-white {
+    background-color: #fff; color: #000;
+    font-size: 16px; font-weight: 700;
+    padding: 14px 35px; border-radius: 8px; border: none;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; transition: 0.2s;
+}
+.btn-details-white:hover { background-color: #e0e0e0; }
+
+/* =========================================
+   5. CONTINUE WATCHING & CARDS
+   ========================================= */
+.continue-wrapper { padding: 0; margin-top: 0px; position: relative; z-index: 10; display: none; }
+
+.cw-card {
+    position: relative; min-width: 200px;
+    border-radius: 8px; overflow: hidden; margin-right: 15px;
+    background: #111; display: block;
+    border: 1px solid #333;
+}
+.cw-img { width: 100%; height: 110px; object-fit: cover; opacity: 0.7; transition: 0.3s; }
+.cw-card:hover .cw-img { opacity: 1; }
+.cw-info { padding: 10px; }
+.cw-title { font-size: 13px; font-weight: bold; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cw-ep { font-size: 11px; color: #fff; margin-top: 2px; }
+.cw-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: #333; width: 100%; }
+.cw-progress { height: 100%; background: var(--lok-orange); width: 100%; }
+
+/* Trending & Grid Cards */
+.trending-wrapper { padding: 0 20px; margin-bottom: 40px; margin-top: 30px; }
+.trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.trending-scroll::-webkit-scrollbar { display: none; }
+.trend-card { min-width: 160px; max-width: 160px; }
+
+.main-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px; padding: 0 20px; margin-bottom: 50px;
+}
+
+.anime-card {
+    background: var(--bg-card); border-radius: 8px;
+    overflow: hidden; position: relative; transition: 0.3s;
+    border: 1px solid transparent; display: block;
+}
+.anime-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.anime-card img { width: 100%; height: 230px; object-fit: cover; transition: 0.3s; }
+.anime-card:hover img { opacity: 0.8; }
+
+.card-info { padding: 12px; }
+.card-title { font-weight: 700; font-size: 14px; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-meta { font-size: 11px; color: var(--primary); margin-top: 4px; font-weight: 600; text-transform: uppercase; }
+
+.rank-badge {
+    position: absolute; top: 0; left: 0; width: 35px; height: 35px;
+    background: var(--primary); color: #000; font-weight: 900; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    border-bottom-right-radius: 8px; z-index: 10;
+}
+
+.section-title {
+    font-size: 1.4rem; font-weight: 800; border-left: 5px solid var(--lok-orange);
+    padding-left: 15px; margin-bottom: 20px; display: inline-block;
+    text-transform: uppercase; letter-spacing: 0.5px; color: white;
+}
+
+/* =========================================
+   6. VIDEO PLAYER (STATIC FIX)
+   ========================================= */
+/* 🚨 RAM-BAAN FIX: Force Static Layout */
+.player-screen { width: 100%; min-height: 100vh; background: #000; padding-top: 60px; }
+
+.video-wrapper-placeholder, 
+.video-container, 
+.video-container-simple,
+.static-video-wrapper,
+#mainPlayerBox,
+#staticPlayerBox {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16/9 !important;
+    position: relative !important;
+    display: block !important;
+    margin: 0 auto !important;
+    left: auto !important; top: auto !important; right: auto !important; bottom: auto !important;
+    float: none !important;
+    transform: none !important;
+    z-index: 10 !important;
+}
+
+.plyr, video, iframe {
+    width: 100% !important; height: 100% !important;
+    position: absolute !important; top: 0; left: 0;
+    object-fit: cover;
+}
+
+/* Kill any floating classes */
+.floating, .sticky-player { position: static !important; }
+
+/* =========================================
+   7. MOBILE RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+    .hero-main-title { font-size: 2.8rem; }
+    .hero-content { bottom: 60px; width: 100%; left: 0; padding: 0 20px; }
+    .hero-container, .swiper-hero { height: 75vh; min-height: 500px; }
+    .hero-actions { width: 100%; }
+    .btn-watch-orange, .btn-details-white { flex: 1; justify-content: center; }
+    .hero-description { display: none; } /* Hide description on mobile for cleaner look */
+    
+    .main-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 10px; }
+    .anime-card img { height: 160px; }
+    .card-info { padding: 8px; }
+    .card-title { font-size: 12px; }
+}
+/* =========================================
+   CONTINUE WATCHING (PREMIUM STYLE)
+   ========================================= */
+.continue-wrapper { 
+    padding: 0; margin-top: 10px; margin-bottom: 30px; 
+    position: relative; z-index: 10; display: none; 
+}
+
+/* Card Container */
+.cw-card {
+    position: relative; 
+    min-width: 220px; /* Thoda choda (wide) */
+    max-width: 220px;
+    border-radius: 8px; overflow: hidden; margin-right: 15px;
+    background: #1a1a1a; display: block;
+    transition: transform 0.3s ease;
+    border: 1px solid #333;
+}
+
+.cw-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--lok-orange);
+}
+
+/* Image Wrapper */
+.cw-img-wrap {
+    position: relative;
+    width: 100%;
+    height: 125px; /* Fixed Height */
+}
+
+.cw-img { 
+    width: 100%; height: 100%; object-fit: cover; 
+    opacity: 0.8; transition: 0.3s;
+}
+
+.cw-card:hover .cw-img { opacity: 0.4; }
+
+/* Play Icon Overlay (New) */
+.cw-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: 0.3s;
+}
+
+.cw-overlay i {
+    font-size: 30px; color: #fff;
+    background: var(--lok-orange);
+    width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--lok-orange);
+}
+
+.cw-card:hover .cw-overlay { opacity: 1; }
+
+/* Progress Bar */
+.cw-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: rgba(255,255,255,0.2); width: 100%; }
+.cw-progress { height: 100%; background: var(--lok-orange); width: 85%; /* Mock progress */ }
+
+/* Info Text */
+.cw-info { padding: 10px; }
+.cw-title { 
+    font-size: 13px; font-weight: bold; color: #fff; 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+}
+.cw-ep { font-size: 11px; color: var(--lok-orange); margin-top: 3px; font-weight: 600; }
