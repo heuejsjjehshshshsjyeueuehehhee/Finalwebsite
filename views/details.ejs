@@ -1,0 +1,192 @@
+<%- include('partials/header') %>
+
+<style>
+    /* 🟢 HERO LAYOUT */
+    .details-hero {
+        position: relative;
+        width: 100%;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 40px;
+    }
+
+    .hero-bg {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; z-index: 0;
+        filter: blur(15px) brightness(0.3); transform: scale(1.1);
+    }
+
+    .hero-content-wrapper {
+        position: relative; z-index: 2; max-width: 1200px; width: 100%;
+        display: flex; gap: 50px; align-items: center; flex-wrap: wrap;
+    }
+
+    /* POSTER */
+    .poster-link { flex-shrink: 0; text-decoration: none; cursor: pointer; }
+    .poster-frame {
+        width: 300px; height: 450px; border-radius: 15px; overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        transition: transform 0.3s;
+    }
+    .poster-frame:hover { transform: scale(1.02); }
+    .poster-img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* INFO SECTION */
+    .anime-info-box { flex: 1; display: flex; flex-direction: column; justify-content: center; color: white; }
+    
+    .anime-title-big { 
+        font-size: 3.5rem; font-weight: 800; line-height: 1.1; 
+        margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+    }
+    
+    /* 🟢 ONLY SERIES/MOVIE TEXT */
+    .anime-type-label {
+        font-size: 16px;
+        color: var(--primary); /* Highlight Color */
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .anime-desc { 
+        color: #ddd; font-size: 16px; line-height: 1.6; 
+        margin-bottom: 30px; max-width: 700px; text-shadow: 0 1px 2px black; 
+    }
+
+    /* PLAY BUTTON */
+    .btn-play-hero {
+        background: white; color: black; padding: 15px 40px;
+        border-radius: 8px; font-weight: 800; font-size: 18px;
+        display: inline-flex; align-items: center; gap: 12px;
+        transition: 0.2s; border: none; text-decoration: none; width: fit-content;
+    }
+    .btn-play-hero:hover { background: var(--primary); transform: translateY(-2px); }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+        .details-hero { padding: 30px 20px; min-height: auto; align-items: flex-start; }
+        .hero-content-wrapper { flex-direction: column; align-items: center; text-align: center; gap: 30px; }
+        .poster-frame { width: 200px; height: 300px; }
+        .anime-title-big { font-size: 2.2rem; }
+    }
+
+    /* EPISODE LIST STYLES */
+    .ep-list-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .ep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 8px; padding: 10px 0; }
+    .ep-btn { background: #1a1a1a; color: #ccc; text-align: center; padding: 12px 0; border-radius: 8px; font-weight: 600; font-size: 14px; transition: 0.2s; border: 1px solid #333; text-decoration: none; display: block; }
+    .ep-btn:hover { background: #333; color: white; transform: translateY(-2px); }
+    .season-selector-container { position: relative; min-width: 140px; z-index: 50; }
+    .season-trigger { background: #222; color: white; padding: 8px 15px; border-radius: 30px; border: 1px solid #444; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .season-options { position: absolute; top: 110%; right: 0; width: 100%; min-width: 150px; background: rgba(30,30,30,0.95); backdrop-filter: blur(10px); border: 1px solid #444; border-radius: 12px; padding: 5px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .season-selector-container.open .season-options { opacity: 1; visibility: visible; transform: translateY(0); }
+    .season-opt { padding: 10px 15px; color: #ccc; cursor: pointer; border-radius: 8px; font-size: 13px; }
+    .season-opt:hover { background: rgba(255,255,255,0.1); }
+    .season-opt.active { color: var(--primary); font-weight: bold; background: rgba(255,180,58,0.1); }
+</style>
+
+<% 
+    let totalEpisodes = 0;
+    anime.seasons.forEach(s => totalEpisodes += s.episodes.length);
+    let globalCounter = 0;
+    
+    let watchLink = "#";
+    if(anime.seasons.length > 0 && anime.seasons[0].episodes.length > 0) {
+        watchLink = `/watch/${anime.slug}?season=${anime.seasons[0].season}&episode=${anime.seasons[0].episodes[0].episode}`;
+    }
+%>
+
+<div class="main-screen">
+    
+    <div class="details-hero">
+        <img src="<%= anime.coverImage || anime.thumbnail %>" class="hero-bg">
+        
+        <div class="hero-content-wrapper">
+            
+            <a href="<%= watchLink %>" class="poster-link">
+                <div class="poster-frame">
+                    <img src="<%= anime.thumbnail %>" class="poster-img" alt="<%= anime.title %>">
+                </div>
+            </a>
+
+            <div class="anime-info-box">
+                <h1 class="anime-title-big"><%= anime.title %></h1>
+                
+                <div class="anime-type-label">
+                    <%= (anime.type === 'TV' || !anime.type) ? 'Series' : 'Movie' %>
+                </div>
+
+                <p class="anime-desc"><%= anime.description || 'Watch this anime in high quality.' %></p>
+
+                <a href="<%= watchLink %>" class="btn-play-hero">
+                    <i class="fas fa-play"></i> Watch Now
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="ep-list-container">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:15px;">
+            <h3 style="font-size:1.1rem; color:white; margin:0;">Episodes (<%= totalEpisodes %>)</h3>
+            
+            <div class="season-selector-container" id="seasonDropdown">
+                <div class="season-trigger" onclick="toggleSeasonMenu()">
+                    <span id="seasonTriggerText">Season 1</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="season-options">
+                    <% anime.seasons.forEach(s => { %>
+                        <div class="season-opt <%= s.season == 1 ? 'active' : '' %>" 
+                             onclick="selectSeason('<%= s.season %>')">
+                            Season <%= s.season %>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <% anime.seasons.forEach(season => { %>
+            <div class="season-group ep-grid" id="season-<%= season.season %>" style="display: <%= season.season == 1 ? 'grid' : 'none' %>;">
+                <% season.episodes.forEach((ep, index) => { %>
+                    <% 
+                        globalCounter++; 
+                        let myEpNumber = ep.episode || globalCounter;
+                        let displayNum = globalCounter; 
+                    %>
+                    <a href="/watch/<%= anime.slug %>?season=<%= season.season %>&episode=<%= myEpNumber %>" 
+                       class="ep-btn">
+                        <%= displayNum %>
+                    </a>
+                <% }) %>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<br><br><br>
+
+<%- include('partials/bottom_nav') %>
+
+<script>
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('seasonDropdown');
+        if (!container.contains(e.target)) container.classList.remove('open');
+    });
+
+    function toggleSeasonMenu() { 
+        document.getElementById('seasonDropdown').classList.toggle('open'); 
+    }
+
+    function selectSeason(seasonNum) {
+        document.querySelectorAll('.season-group').forEach(el => el.style.display = 'none');
+        document.getElementById('season-' + seasonNum).style.display = 'grid';
+        document.getElementById('seasonTriggerText').innerText = "Season " + seasonNum;
+        toggleSeasonMenu();
+    }
+</script>
+
+<%- include('partials/footer') %>

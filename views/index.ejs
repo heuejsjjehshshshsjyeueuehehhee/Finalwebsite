@@ -1,0 +1,145 @@
+<%- include('partials/header') %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+    .swiper-hero {
+        width: 100%; height: 85vh; min-height: 600px;
+    }
+    .swiper-pagination-bullet {
+        background: #fff; opacity: 0.5; width: 10px; height: 10px; transition: 0.3s;
+    }
+    .swiper-pagination-bullet-active {
+        background: var(--lok-orange); opacity: 1; width: 30px; border-radius: 5px;
+    }
+    .swiper-pagination {
+        bottom: 30px !important; text-align: right; padding-right: 40px; z-index: 10;
+    }
+    .swiper-button-next, .swiper-button-prev {
+        color: white; transform: scale(0.7); font-weight: bold; text-shadow: 0 0 10px black;
+    }
+    @media (max-width: 768px) {
+        .swiper-pagination { text-align: center; padding-right: 0; bottom: 10px !important; }
+        .swiper-button-next, .swiper-button-prev { display: none; } 
+    }
+</style>
+
+<% if (typeof spotlightList !== 'undefined' && spotlightList.length > 0) { %>
+    <div class="swiper swiper-hero">
+        <div class="swiper-wrapper">
+            <% spotlightList.forEach((spotlight, index) => { %>
+                <div class="swiper-slide">
+                    <div class="hero-container" style="height: 100%;">
+                        <img src="<%= spotlight.coverImage || spotlight.thumbnail %>" class="hero-backdrop">
+                        <div class="hero-gradient"></div>
+
+                        <div class="hero-content">
+                            <div class="spotlight-label">#<%= index + 1 %> Spotlight</div>
+                            <div class="hero-main-title"><%= spotlight.title %></div>
+
+                            <div class="hero-description" style="margin-top: 20px;">
+                                <%= spotlight.description ? spotlight.description.substring(0, 150) + '...' : 'Watch this trending anime now.' %>
+                            </div>
+
+                            <div class="hero-actions">
+                                <% 
+                                   let watchUrl = spotlight.slug ? `/watch/${spotlight.slug}` : '#'; 
+                                   if (spotlight.seasons && spotlight.seasons.length > 0 && spotlight.seasons[0].episodes.length > 0) {
+                                        watchUrl += `?season=${spotlight.seasons[0].season}&episode=${spotlight.seasons[0].episodes[0].episode}`;
+                                   }
+                                %>
+                                <a href="<%= watchUrl %>" class="btn-watch-orange">
+                                    <i class="fas fa-play"></i> Watch Now
+                                </a>
+                                <a href="/anime/<%= spotlight.slug %>" class="btn-details-white">
+                                    Details <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+<% } %>
+
+<div class="continue-wrapper" id="continueSection">
+    <div class="section-title" style="padding-left: 20px;"><i class="fas fa-history"></i> Continue Watching</div>
+    <div class="trending-scroll" id="continueList" style="padding-left: 20px;"></div>
+</div>
+
+<% if (typeof trending !== 'undefined' && trending && trending.length > 0) { %>
+    <div class="trending-wrapper">
+        <div class="section-title">🔥 Trending Anime</div>
+        <div class="trending-scroll">
+            <% trending.forEach((anime, index) => { %>
+                <a href="/anime/<%= anime.slug %>" class="anime-card trend-card">
+                    <div class="rank-badge">#<%= index + 1 %></div>
+                    <img src="<%= anime.thumbnail %>">
+                    <div class="card-info">
+                        <div class="card-title"><%= anime.title %></div>
+                        <div class="card-meta">Trending</div>
+                    </div>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+<% } %>
+
+<div style="padding: 0 20px;">
+    <div class="section-title"><%= typeof sectionTitle !== 'undefined' ? sectionTitle : 'Latest Updates' %></div>
+</div>
+<div class="main-grid">
+    <% animeList.forEach(anime => { %>
+        <a href="/anime/<%= anime.slug %>" class="anime-card">
+            <img src="<%= anime.thumbnail %>" loading="lazy">
+            <div class="card-info">
+                <div class="card-title"><%= anime.title %></div>
+                <div class="card-meta"><%= anime.type || 'TV' %> • <%= anime.seasons ? anime.seasons.length + ' Seasons' : 'Ep 1' %></div>
+            </div>
+        </a>
+    <% }) %>
+</div>
+<br><br>
+
+<%- include('partials/bottom_nav') %>
+<%- include('partials/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Slider Logic
+        const swiper = new Swiper('.swiper-hero', {
+            loop: true, effect: 'slide', speed: 800,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        });
+
+        // 🟢 NEW CONTINUE WATCHING LOGIC (With Play Button)
+        const history = JSON.parse(localStorage.getItem('weeb_history')) || [];
+        const container = document.getElementById('continueSection');
+        const list = document.getElementById('continueList');
+
+        if (history.length > 0) {
+            container.style.display = 'block';
+            history.slice(0, 10).forEach(item => {
+                list.innerHTML += `
+                    <a href="${item.link}" class="cw-card">
+                        <div class="cw-img-wrap">
+                            <img src="${item.img}" class="cw-img">
+                            <div class="cw-overlay"><i class="fas fa-play"></i></div>
+                            <div class="cw-bar"><div class="cw-progress"></div></div>
+                        </div>
+                        <div class="cw-info">
+                            <div class="cw-title">${item.title}</div>
+                            <div class="cw-ep">Ep ${item.ep} - Continue</div>
+                        </div>
+                    </a>`;
+            });
+        }
+    });
+</script>

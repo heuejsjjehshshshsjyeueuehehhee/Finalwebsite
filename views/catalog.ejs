@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+
+<div style="padding-top: 80px; padding-bottom: 40px; min-height: 80vh;">
+    
+    <div style="padding: 0 20px;">
+        <div class="section-title"><%= title %></div>
+    </div>
+
+    <% if (animeList && animeList.length > 0) { %>
+        <div class="main-grid">
+            <% animeList.forEach(anime => { %>
+                <a href="/anime/<%= anime.slug %>" class="anime-card">
+                    <div class="rank-badge" style="background:#333; color:#fff; font-size:10px;">
+                        <%= anime.type || 'TV' %>
+                    </div>
+                    <img src="<%= anime.thumbnail %>" loading="lazy">
+                    <div class="card-info">
+                        <div class="card-title"><%= anime.title %></div>
+                        <div class="card-meta">
+                            <%= anime.seasons ? anime.seasons.length + ' Seasons' : 'Ep 1' %>
+                        </div>
+                    </div>
+                </a>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div style="text-align: center; color: #777; margin-top: 100px;">
+            <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+            <p>No anime found in this category yet.</p>
+        </div>
+    <% } %>
+
+</div>
+
+<br><br>
+
+<%- include('partials/bottom_nav') %>
+<%- include('partials/footer') %>

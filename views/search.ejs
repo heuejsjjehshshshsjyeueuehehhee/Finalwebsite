@@ -1,0 +1,198 @@
+<%- include('partials/header') %>
+
+<style>
+    /* 🟢 SEARCH PAGE CONTAINER */
+    .search-page {
+        padding: 60px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        min-height: 80vh;
+    }
+
+    /* SEARCH INPUT */
+    .search-wrapper {
+        position: relative;
+        margin-bottom: 30px;
+        z-index: 100;
+    }
+    
+    .search-input {
+        width: 100%;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 15px 25px;
+        font-size: 18px;
+        border-radius: 50px;
+        outline: none;
+        transition: 0.3s;
+        backdrop-filter: blur(10px);
+    }
+    
+    .search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(255, 180, 58, 0.1);
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        font-size: 18px;
+        pointer-events: none;
+    }
+
+    /* LIVE RESULTS LIST */
+    .live-results-box {
+        margin-top: 20px;
+        display: none;
+    }
+
+    .results-label {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+        margin-left: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Result Item */
+    .live-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-bottom: 1px solid #222;
+        text-decoration: none;
+        transition: 0.2s;
+        border-radius: 12px;
+    }
+    
+    .live-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateX(5px);
+    }
+
+    .item-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+    .live-item:hover .item-icon {
+        background: var(--primary);
+        color: black;
+    }
+
+    /* TYPE BADGE */
+    .type-badge {
+        background: #333;
+        color: #ccc;
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .item-title {
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #444;
+        margin-top: 80px;
+    }
+</style>
+
+<div class="search-page">
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" 
+               placeholder="Search anime..." autocomplete="off" autofocus>
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div id="liveResults" class="live-results-box"></div>
+
+    <div id="searchPlaceholder" class="empty-state">
+        <i class="fas fa-ghost" style="font-size:40px; margin-bottom:15px;"></i>
+        <p>Type to search...</p>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const resultsBox = document.getElementById('liveResults');
+    const placeholder = document.getElementById('searchPlaceholder');
+    let debounceTimer;
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        const query = this.value.trim();
+
+        if (query.length < 2) {
+            resultsBox.style.display = 'none';
+            placeholder.style.display = 'block';
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    renderResults(data);
+                });
+        }, 300);
+    });
+
+    function renderResults(data) {
+        resultsBox.innerHTML = '';
+        placeholder.style.display = 'none';
+        
+        if (data.length === 0) {
+            resultsBox.innerHTML = '<div style="padding:15px; color:#666; text-align:center;">No results found</div>';
+            resultsBox.style.display = 'block';
+            return;
+        }
+
+        const label = document.createElement('div');
+        label.className = 'results-label';
+        label.innerText = 'Results';
+        resultsBox.appendChild(label);
+
+        data.forEach(anime => {
+            const link = document.createElement('a');
+            link.className = 'live-item';
+            link.href = `/anime/${anime.slug}`; 
+
+            // 🟢 LOGIC CHANGE: Check for 'TV' and replace with 'SERIES'
+            let displayType = anime.type || 'Series';
+            if(displayType === 'TV') displayType = 'Series';
+
+            link.innerHTML = `
+                <div class="item-icon"><i class="fas fa-play"></i></div>
+                <div class="type-badge">${displayType}</div>
+                <div class="item-title">${anime.title}</div>
+            `;
+            
+            resultsBox.appendChild(link);
+        });
+
+        resultsBox.style.display = 'block';
+    }
+</script>
+
+<%- include('partials/bottom_nav') %>
